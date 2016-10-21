@@ -24,27 +24,12 @@ var generate_rand = function(min, max){
 	}	
 }
 
-var array_test = [];
-var array_order = [];
+var list = [];
 var start = 0;
-var end = 5;
-
-var searchMinor = function(m){
-	var n = m;
-	while(n>=0){		
-		if(array_order.indexOf(n) > -1){
-			return array_order.indexOf(n);
-		}else{
-			n--;
-		}		
-	}
-
-	return m;
-}
+var end = 10;
 
 for(i=start;i<end;i++){	
-	var a = generate_rand(start,end);	
-	array_test.splice(a, 0, a);				
+	list.push(generate_rand(start,end));				
 }
 
-console.log(array_test);
+console.log(list);
