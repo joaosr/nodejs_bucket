@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+</head>
+<style>
+body {
+  background: url('https://www.blacklane.com/images/home/background-home.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-size: 16px;
+  font-family: Helvetica, sans-serif;
+}
+aside {
+  padding: 0 1.375em;
+}
+p, ul, li {
+  font-size: 1em;
+  line-height: 1.375;
+  margin: 0.6875em 0;
+}
+h1 {
+  font-size: 1.5em;
+  line-height: 1.8333em;
+  margin-top: 0.9167em;
+  margin-bottom: 0;
+}
+h2 {
+  font-size: 1.25em;
+  line-height: 1.1em;
+  margin-top: 1.1em;
+  margin-bottom: 0;
+}
+
+.btn-tab-selected {
+  background-color: rgba(0, 0, 0, 0.0);
+}
+.btn-tab {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+</style>
+<body>
+  <h1>MoinBooking</h1>
+  <div class="container" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="row">
+      <span ng-class="{'col-xs-6': true, 'btn-tab':towleg, 'btn-tab-selected':!towleg}">
+        <button class="btn btn-link btn-block" ng-click="towleg = false">ONE WAY</button>
+      </span>
+      <span ng-class="{'col-xs-6': true, 'btn-tab':!towleg, 'btn-tab-selected':towleg}">
+        <button class="btn btn-link btn-block" ng-click="towleg = true">HOURLY</button>
+      </span>
+    </div>
+    <!-- <form name="booking_request_form" id="new_booking_request" action="https://www.blacklane.com/en/booking_requests/transfers/new" accept-charset="UTF-8" method="get"> -->
+    <form name="booking_request_form" id="new_booking_request" accept-charset="UTF-8" method="get">
+      <input name="utf8" type="hidden" value="✓">
+      <div class="form-group">
+        <fieldset id="first-leg" >
+          <div class="form-group">
+            <div class="col-sm-6">
+              <input class="form-control" placeholder="From: address, airport, hotel, ..." type="text" name="booking_request[pickup]">
+            </div>
+            <div class="col-sm-6">
+              <input class="form-control" placeholder="To: address, airport, hotel, ..." type="text" name="booking_request[dropoff]">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-6">
+              <input class="form-control" type="date" name="booking_request[at_date]">
+            </div>
+            <div class="col-sm-6">
+              <input class="form-control" type="time" name="booking_request[at_time]">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset ng-if="towleg">
+          <!-- Please mind that submitting the following fields (anything related to a return ride) to the booking funnel won't have any effect - e.g.: it just won't work yet, feel free to focus on something else :)-->
+          <div class="form-group">
+            <div class="col-sm-6">
+              <input class="form-control" placeholder="From: address, airport, hotel, ..." type="text" name="booking_request[return_pickup]">
+            </div>
+            <div class="col-sm-6">
+              <input class="form-control" placeholder="To: address, airport, hotel, ..." type="text" name="booking_request[return_dropoff]">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-6">
+              <input class="form-control" type="date" name="booking_request[return_at_date]">
+            </div>
+            <div class="col-sm-6">
+              <input class="form-control" type="time" name="booking_request[return_at_time]">
+            </div>
+          </div>
+        </fieldset>
+        <button class="btn btn-primary btn-block">BOOK A RIDE</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
