@@ -1,0 +1,25 @@
+{
+  "name": "nodejs_bucket",
+  "version": "1.0.0",
+  "description": "Espaço onde coloco coisas que estou aprendendo sobre a ferramenta.",
+  "main": "list_order.js",
+  "scripts": {
+    "start" : "node node_modules/protractor/bin/webdriver-manager start",
+    "setup": "npm install && node node_modules/protractor/bin/webdriver-manager update",
+    "test": "node node_modules/protractor/bin/protractor conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaosr/nodejs_bucket.git"
+  },
+  "author": "joaosr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joaosr/nodejs_bucket/issues"
+  },
+  "homepage": "https://github.com/joaosr/nodejs_bucket#readme",
+  "dependencies": {
+    "jasmine": "^2.5.3",
+    "protractor": "^5.1.1"
+  }
+}
