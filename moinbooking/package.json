@@ -4,9 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node node_modules/protractor/bin/webdriver-manager start",
+    "setup": "npm install && node node_modules/protractor/bin/webdriver-manager update",
+    "test": "node node_modules/protractor/bin/protractor conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaosr/nodejs_bucket.git"
   },
   "author": "joaosr",
   "license": "ISC",
-  "dependencies": {}
+  "bugs": {
+    "url": "https://github.com/joaosr/nodejs_bucket/issues"
+  },
+  "homepage": "https://github.com/joaosr/nodejs_bucket#readme",
+  "dependencies": {
+    "jasmine": "^2.5.3",
+    "protractor": "^5.1.1"
+  }
 }
