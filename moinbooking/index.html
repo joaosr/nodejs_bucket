@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en">
 <head>
   <title>MoinBooking</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+  <script src="node_modules/moment/moment.js"></script>
 </head>
 <style>
 body {
@@ -30,6 +31,7 @@ h1 {
   line-height: 1.8333em;
   margin-top: 0.9167em;
   margin-bottom: 0;
+  color: white;
 }
 h2 {
   font-size: 1.25em;
@@ -45,64 +47,134 @@ h2 {
   background-color: rgba(255, 255, 255, 0.1);
 }
 </style>
-<body>
+<body ng-app="rideApp">
   <h1>MoinBooking</h1>
-  <div class="container" style="background-color: rgba(0, 0, 0, 0.5);">
+  <div class="container" ng-controller="RideController" style="background-color: rgba(0, 0, 0, 0.5);">
     <div class="row">
       <span ng-class="{'col-xs-6': true, 'btn-tab':towleg, 'btn-tab-selected':!towleg}">
         <button id="oneway-tab" class="btn btn-link btn-block" ng-click="towleg = false">ONE WAY</button>
       </span>
       <span ng-class="{'col-xs-6': true, 'btn-tab':!towleg, 'btn-tab-selected':towleg}">
-        <button id="hourly-tab" class="btn btn-link btn-block" ng-click="towleg = true">HOURLY</button>
+        <button id="twoway-tab" class="btn btn-link btn-block" ng-click="towleg = true">TWO WAY</button>
       </span>
     </div>
-    <!-- <form name="booking_request_form" id="new_booking_request" action="https://www.blacklane.com/en/booking_requests/transfers/new" accept-charset="UTF-8" method="get"> -->
-    <form name="booking_request_form" id="new_booking_request" accept-charset="UTF-8" method="get">
+    <!-- <form name="booking_request_form" id="new_booking_request" action="https://www.blacklane.com/en/booking_requests/transfers/new" accept-charset="UTF-8" method="get" target="hiddenFrame"> -->
+    <form ng-submit="submitRide()" name="booking_request_form" id="new_booking_request" accept-charset="UTF-8">
       <input name="utf8" type="hidden" value="✓">
+      </br>
       <div class="form-group">
-        <fieldset id="first-leg">
+        <fieldset class="form-group" id="first-leg">
           <div class="form-group">
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="pickup" placeholder="From: address, airport, hotel, ..." type="text" name="booking_request[pickup]" required>
-            </div>
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="dropoff" placeholder="To: address, airport, hotel, ..." type="text" name="booking_request[dropoff]">
+            <div class="row">
+              <div class="col-sm-6">
+                <input class="form-control" ng-model="pickup" placeholder="From: address, airport, hotel, ..." type="text" name="booking_request[pickup]" required>
+              </div>
+              <div class="col-sm-6">
+                <input class="form-control" ng-model="dropoff" placeholder="To: address, airport, hotel, ..." type="text" name="booking_request[dropoff]" required>
+              </div>
             </div>
           </div>
-
           <div class="form-group">
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="at_date" type="date" name="booking_request[at_date]">
-            </div>
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="at_time" type="time" name="booking_request[at_time]">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i></span>
+                  <input data-provide="datepicker" class="form-control" ng-model="at_date" type="date" name="booking_request[at_date]" required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
+                  <input class="form-control" ng-model="at_time" type="time" name="booking_request[at_time]" required>
+                </div>
+              </div>
             </div>
           </div>
         </fieldset>
 
-        <fieldset ng-if="towleg" id="second-leg">
+        <fieldset class="form-group" ng-if="towleg" id="second-leg">
           <!-- Please mind that submitting the following fields (anything related to a return ride) to the booking funnel won't have any effect - e.g.: it just won't work yet, feel free to focus on something else :)-->
           <div class="form-group">
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="return_pickup" placeholder="From: address, airport, hotel, ..." type="text" name="booking_request[return_pickup]" required>
-            </div>
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="return_dropoff" placeholder="To: address, airport, hotel, ..." type="text" name="booking_request[return_dropoff]" required>
+            <div class="row">
+              <div class="col-sm-6">
+                <input class="form-control" ng-model="return_pickup" placeholder="From: address, airport, hotel, ..." type="text" name="booking_request[return_pickup]" required>
+              </div>
+              <div class="col-sm-6">
+                <input class="form-control" ng-model="return_dropoff" placeholder="To: address, airport, hotel, ..." type="text" name="booking_request[return_dropoff]" required>
+              </div>
             </div>
           </div>
 
           <div class="form-group">
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="return_at_date" type="date" name="booking_request[return_at_date]" required>
-            </div>
-            <div class="col-sm-6">
-              <input class="form-control" ng-model="return_at_time" type="time" name="booking_request[return_at_time]" required>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-calendar"></i></span>
+                  <input class="form-control" ng-model="return_at_date" type="date" name="booking_request[return_at_date]" required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i></span>
+                  <input class="form-control" ng-model="return_at_time" type="time" name="booking_request[return_at_time]" required>
+                </div>
+              </div>
             </div>
           </div>
         </fieldset>
-        <button class="btn btn-primary btn-block">BOOK A RIDE</button>
+      </div>
+      <div class="form-group">
+        <button id="book_ride" type="submit" value="Submit" ng-disabled="!booking_request_form.$valid" class="btn btn-primary btn-block">BOOK A RIDE</button>
       </div>
     </form>
+    <div class="alert alert-success" ng-if="status == SUCCESS">
+      <strong>Success!</strong>
+    </div>
+
+    <div class="alert alert-danger" ng-if="status == FAIL">
+      <strong>Error!</strong>
+    </div>
   </div>
 </body>
+<script type="text/javascript">
+    var rideApp = angular.module('rideApp', []);
+
+    rideApp.controller('RideController', RideController);
+
+    RideController.$inject = ['$scope', '$http'];
+
+    function RideController($scope, $http){
+      $scope.status = "";
+      $scope.SUCCESS = "success";
+      $scope.FAIL = "fail";
+
+      $scope.submitRide = function(){
+          var postData = {
+              "utf8": "✓",
+              "booking_request[pickup]": $scope.pickup,
+              "booking_request[dropoff]": $scope.dropoff,
+              "booking_request[at_date]": moment($scope.at_date).format('YYYY-MM-DD'),
+              "booking_request[at_time]": moment($scope.at_time).format('HH:mm'),
+          }
+
+          if($scope.towleg){
+              postData["booking_request[return_pickup]"] = $scope.return_pickup;
+              postData["booking_request[return_dropoff]"] = $scope.return_dropoff;
+              postData["booking_request[return_at_date]"] = moment($scope.return_at_date).format('YYYY-MM-DD');
+              postData["booking_request[return_at_time]"] = moment($scope.return_at_time).format('HH:mm');
+          }
+
+          $http.get('https://www.blacklane.com/en/booking_requests/transfers/new', {
+              params: postData,
+              headers: {"Access-Control-Allow-Origin": "*"}
+          }).then(function(result){
+              console.log(result);
+              $scope.status = $scope.SUCCESS;
+          }, function(error){
+              $scope.status = $scope.FAIL;
+              console.log(error);
+          });
+      }
+    }
+</script>
 </html>

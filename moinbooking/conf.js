@@ -16,5 +16,5 @@ exports.config = {
         browser.resetUrl = 'file://';
     },
 
-    allScriptsTimeout: 30000
+    allScriptsTimeout: 300000
 }

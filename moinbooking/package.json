@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node node_modules/protractor/bin/webdriver-manager start",
+    "start": "node index.js",
     "setup": "npm install && node node_modules/protractor/bin/webdriver-manager update",
     "test": "node node_modules/protractor/bin/protractor conf.js"
   },
@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/joaosr/nodejs_bucket#readme",
   "dependencies": {
+    "express": "^4.15.2",
     "jasmine": "^2.5.3",
+    "moment": "^2.18.1",
     "protractor": "^5.1.1"
   }
 }
